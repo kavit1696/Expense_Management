@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import {
     Users,
     LogOut,
     LayoutDashboard,
-    FileText
+    FileText,
+    X
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Header from '../components/Header';
@@ -12,6 +13,7 @@ import Header from '../components/Header';
 const AdminLayout = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const navItems = [
         { name: 'Dashboard', path: '/admin/dashboard', icon: <LayoutDashboard size={20} /> },
@@ -19,15 +21,31 @@ const AdminLayout = () => {
         { name: 'My Reports', path: '/admin/my-reports', icon: <FileText size={20} /> },
     ];
 
+    const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
     return (
         <div className="app-layout">
+            {/* Sidebar Mobile Overlay */}
+            {isMobileMenuOpen && (
+                <div
+                    className="sidebar-overlay active"
+                    onClick={closeMobileMenu}
+                    aria-hidden="true"
+                />
+            )}
+
             {/* Sidebar */}
-            <aside className="sidebar">
+            <aside className={`sidebar ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
                 <div className="sidebar-header">
                     <div className="logo-icon">EM</div>
                     <div className="logo-text">
                         <h1>Expense Manager</h1>
                     </div>
+                    {isMobileMenuOpen && (
+                        <button className="mobile-close-btn" onClick={closeMobileMenu} aria-label="Close menu">
+                            <X size={20} />
+                        </button>
+                    )}
                 </div>
 
                 <nav className="sidebar-nav">
@@ -38,6 +56,7 @@ const AdminLayout = () => {
                             to={item.path}
                             end={item.name === 'Dashboard'}
                             className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+                            onClick={closeMobileMenu}
                         >
                             {item.icon}
                             <span>{item.name}</span>
@@ -48,7 +67,10 @@ const AdminLayout = () => {
 
             {/* Main Content */}
             <div className="main-content">
-                <Header profilePath="/admin/profile" />
+                <Header
+                    profilePath="/admin/profile"
+                    onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                />
                 <div className="layout-content fade-in">
                     <Outlet />
                 </div>

@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, User } from 'lucide-react';
+import { LogOut, User, Menu } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const Header = ({ profilePath = '/dashboard/profile' }) => {
+const Header = ({ profilePath = '/dashboard/profile', onToggleMobileMenu }) => {
     const navigate = useNavigate();
     const { user, logout } = useAuth();
 
@@ -14,6 +14,22 @@ const Header = ({ profilePath = '/dashboard/profile' }) => {
 
     return (
         <header className="app-header">
+            <div className="header-left">
+                {onToggleMobileMenu && (
+                    <button
+                        className="mobile-menu-toggle"
+                        onClick={onToggleMobileMenu}
+                        aria-label="Toggle navigation menu"
+                    >
+                        <Menu size={22} />
+                    </button>
+                )}
+                <div className="mobile-header-brand">
+                    <div className="logo-icon logo-icon-sm">EM</div>
+                    <span className="mobile-brand-title">Expense Manager</span>
+                </div>
+            </div>
+
             <div className="header-user-section">
                 <div
                     className="header-user-profile"
