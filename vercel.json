@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd expense-manager-frontend && npm install && npm run build",
+  "outputDirectory": "expense-manager-frontend/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
