@@ -7,7 +7,7 @@ const db = createPool({
     user: process.env.DB_USER || "root",
     password: process.env.DB_PASSWORD || "",
     database: process.env.DB_NAME || "expense_manager",
-    ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false,
+    ssl: String(process.env.DB_SSL).toLowerCase() === "true" ? { rejectUnauthorized: false } : false,
     connectionLimit: 10,
     typeCast: function (field, next) {
         if ((field.type === "BIT") && (field.length === 1)) {
